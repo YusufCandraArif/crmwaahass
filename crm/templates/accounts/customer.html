@@ -1,0 +1,40 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<h5>Contact Information:</h5>
+			<hr>
+			<p>Email: {{customer.email}}</p>
+			<p>Device: {{customer.no_motor}}</p>
+			<p>Phone: {{customer.phone}}</p>
+			<p>Email: {{customer.email}}</p>
+			<p>Tipe Motor: {{customer.tipe_motor}}</p>
+			<p>KM Akhir: {{customer.km_akhir}}</p>
+			<hr>
+			<a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'update_customer' customer.id %}">Update Customer</a>
+			<a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'delete_customer' customer.id %}">Delete Customer</a>
+			<hr>
+		</div>
+	</div>
+
+	<div class="col-md">
+		<div class="card card-body">
+			<h5>Customer Status:</h5>
+			<hr>
+			<p>Tanggal Input: {{customer.date_created}}</p>
+			<p>Tanggal H7: {{customer.date_h7}}</p>
+			<p>Tanggal H3: {{customer.date_h3}}</p>
+			<p>Tanggal Telpon: {{customer.date_phone}}</p>
+			<p>Status Kirim WA: {{customer.status_whatsapp}}</p>
+			<p>Status Kedatangan: {{customer.status_kedatangan}}</p>
+			<p>Status Telpon: {{customer.status_call}}</p>
+			<p>Alasan: {{customer.ket}}</p>
+		</div>
+	</div>
+</div>
+<br>
+
+{% endblock %}

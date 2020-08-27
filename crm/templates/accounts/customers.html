@@ -1,0 +1,46 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+
+		<br>
+
+		<div class="row">
+			<div class="col-md">
+				<div class="card card-body">
+					<h5>Customers</h5>
+				</div>
+				<div class="card card-body">
+					<table class="table">
+						<tr>
+							<th>Name</th>
+							<th>Phone</th>
+							<th>Nomor Motor</th>
+							<th>Email</th>
+							<th>H-7</th>
+							<th>H-3</th>
+							<th>H-Telpon</th>
+							<th>Status Kedatangan</th>
+							<th>Status WA</th>
+						</tr>
+
+						{% for i in customers %}
+							<tr>
+								<td><a href="{% url 'customer' i.id %}">{{i.name}}</a></td>
+								<td>{{i.phone}}</td>
+								<td>{{i.no_motor}}</td>
+								<td>{{i.email}}</td>
+								<td>{{i.status_h7}}</td>
+								<td>{{i.status_h3}}</td>
+								<td>{{i.status_telpon}}</td>
+								<td>{{i.status_whatsapp}}</td>
+								<td>{{i.status_kedatangan}}</td>
+							</tr>
+						{% endfor %}
+						
+					</table>
+				</div>
+			</div>
+
+		</div>
+
+{% endblock content %}
