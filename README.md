@@ -22,6 +22,7 @@ Create token user
 - buka `localhost:5000/admin`
 - login dengan username & password yang sudah dibuat
 - pilih menu token, pilih user yang ingin dibuatkan token
+- klik save, maka token user tersebut tergenerate
 
 User register & login account
 - buka `localhost:5000/register/`, registrasi akun
