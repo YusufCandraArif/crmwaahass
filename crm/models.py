@@ -1,8 +1,27 @@
-import threading
+import hashlib
 from django.db import models
 from PIL import Image
 from datetime import datetime, timedelta
 from django.utils import timezone
+from django.contrib.auth.models import User
+from ahass import settings
+
+class Token(models.Model):
+    SECRET_KEY = settings.SECRET_KEY
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    mytoken = models.CharField(max_length=500, blank=True, default='')
+    # token_email = models.CharField(max_length=500, blank=True)
+    # token_user = models.CharField(max_length=500, blank=True)
+
+    def save(self, *args, **kwargs):
+        source_token = self.SECRET_KEY + self.user.username + self.user.email
+        hash_token = hashlib.md5(source_token.encode()).hexdigest()
+        self.mytoken = hash_token
+        super(Token, self).save(*args, **kwargs) 
+
+    def __str__(self):
+        return '{} - {}'.format(self.user.username, self.user.email)
 
 class Customer(models.Model):
     name = models.CharField(max_length=200, null=True, blank=False)

@@ -1,0 +1,11 @@
+hashlib
+Django>=2.0,<3.0
+psycopg2-binary>=2.8
+djangorestframework
+django-rest-auth
+django-cors-headers
+django-rest-knox
+django-crispy-forms
+Pillow
+phonenumbers
+requests
