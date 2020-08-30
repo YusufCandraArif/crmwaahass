@@ -27,7 +27,8 @@ def registerPage(request):
 		return render(request, 'accounts/register.html', context)
 
 def loginPage(request):
-	token = Token.objects.filter(mytoken=request.POST.get('token'))
+	token = Token.objects.filter(user__username=request.POST.get('username'),
+								mytoken=request.POST.get('token'))
 	if request.method == 'POST' and not token:
 		data = {
 			"username": request.POST.get('username'),
