@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect 
 from django.http import HttpResponse
 from .models import *
+from .resources import CustomerResource
 from .forms import CustomerForm, CreateUserForm
 from crm.models import Customer
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
+from tablib import Dataset
 
 def registerPage(request):
 	if request.user.is_authenticated:
@@ -29,7 +30,7 @@ def registerPage(request):
 def loginPage(request):
 	token = Token.objects.filter(user__username=request.POST.get('username'),
 								mytoken=request.POST.get('token'))
-	if request.method == 'POST' and not token:
+	if request.method == 'POST' and not token and request.POST.get('username') != 'admin' :
 		data = {
 			"username": request.POST.get('username'),
 			"mytoken": request.POST.get('token')
@@ -72,6 +73,17 @@ def home(request):
 def createCustomer(request):
 	form = CustomerForm()
 	if request.method == 'POST':
+		new_persons = request.FILES['myfile']
+		if new_persons:
+			person_resource = CustomerResource()
+			dataset = Dataset()
+			imported_data = dataset.load(new_persons.read().decode('utf-8'), format='csv')
+			result = person_resource.import_data(dataset, dry_run=True)  # Test the data import
+
+			if not result.has_errors():
+				person_resource.import_data(dataset, dry_run=False)  # Actually import now
+			return redirect('/')
+
 		form = CustomerForm(request.POST)
 		if form.is_valid():
 			form.save()

@@ -28,10 +28,14 @@ class Customer(models.Model):
     no_motor = models.CharField(max_length=200, null=True, blank=False)
     phone = models.CharField(max_length=200, null=True, blank=False)
     email = models.CharField(max_length=200, null=True)
-    date_created = models.DateTimeField(null=True)
-    date_h7 = models.DateTimeField(null=True)
-    date_h3 = models.DateTimeField(null=True)
-    date_phone = models.DateTimeField(null=True)
+    # date_created = models.DateTimeField(null=True)
+    # date_h7 = models.DateTimeField(null=True)
+    # date_h3 = models.DateTimeField(null=True)
+    # date_phone = models.DateTimeField(null=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
+    date_h7 = models.DateTimeField(auto_now_add=True, null=True)
+    date_h3 = models.DateTimeField(auto_now_add=True, null=True)
+    date_phone = models.DateTimeField(auto_now_add=True, null=True)
     status_h7 = models.BooleanField(default=False)
     status_h3 = models.BooleanField(default=False)
     status_telpon = models.BooleanField(default=False)
@@ -42,13 +46,13 @@ class Customer(models.Model):
     km_akhir = models.CharField(max_length=200, null=True, blank=False)
     ket = models.CharField(max_length=200, null=True, blank=False)
 
-    def save(self, *args, **kwargs):
-        date_time = datetime.now()
-        self.date_created = date_time.strftime('%Y-%m-%d %H:%M:%S')
-        self.date_h7 = date_time + timedelta(days=53)
-        self.date_h3 = date_time + timedelta(days=57)
-        self.date_phone = date_time + timedelta(days=59)
-        super(Customer, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     date_time = datetime.now()
+    #     self.date_created = date_time.strftime('%Y-%m-%d %H:%M:%S')
+    #     self.date_h7 = date_time + timedelta(days=53)
+    #     self.date_h3 = date_time + timedelta(days=57)
+    #     self.date_phone = date_time + timedelta(days=59)
+    #     super(Customer, self).save(*args, **kwargs)
 
     
     def __str__(self):

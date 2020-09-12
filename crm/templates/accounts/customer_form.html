@@ -17,6 +17,14 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">Add Customer</h1>
                         </div>
+                        <p>Already have csv file to import?</p>
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="myfile">
+                            <hr>
+                            <button type="submit" class="btn btn-primary">Upload Data</button>
+                        </form>
+                        <hr>
                         <form method="POST">
                             {% csrf_token %}
                             {{form | crispy}}

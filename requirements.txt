@@ -9,3 +9,4 @@ django-crispy-forms
 Pillow
 phonenumbers
 requests
+django-import-export

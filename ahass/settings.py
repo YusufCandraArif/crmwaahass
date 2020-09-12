@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'crm',
     'crispy_forms',
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 ROOT_URLCONF = 'ahass.urls'
 
