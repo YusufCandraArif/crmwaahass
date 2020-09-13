@@ -21,11 +21,61 @@ class CustomerImportExportAdmin(ImportExportModelAdmin):
         "status_call", 
         "tipe_motor", 
         "km_akhir", 
-        "ket", 
+        "ket",
+        "message1",
+        "message2",
+        "message3",
+        "message4",
+        "status_message1",
+        "status_message2",
+        "status_message3",
+        "status_message4",     
     )
 
 
-# admin.site.register(Customer)
+class SendWAAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "messages",
+        "message", 
+        # "image",
+        "media_url", 
+        "type_media_url", 
+        "location",
+        "device",
+    )
+
+    fields = (
+        "messages",
+        "message",   
+        # "image",
+        "media_url", 
+        "type_media_url", 
+        "location",
+        "device",
+    )
+
+class DeviceAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "phone",
+        "device_code", 
+        "token_api", 
+        "server_address", 
+        "location",
+    )
+
+    fields = (
+        "phone",
+        "device_code", 
+        "token_api", 
+        "server_address", 
+        "location",
+    )
+
+
+admin.site.register(Device, DeviceAdmin)
+admin.site.register(SendWA, SendWAAdmin)
 admin.site.register(Token)
 
 

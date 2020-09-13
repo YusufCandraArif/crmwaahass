@@ -1,0 +1,38 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+
+		<br>
+
+		<div class="row">
+			<div class="col-md">
+				<div class="card card-body">
+					<h5>Devices:</h5>
+				</div>
+				<div class="card card-body">
+					<table class="table">
+						<tr>
+							<th>Phone</th>
+							<th>Device Code</th>
+							<th>Token</th>
+							<th>Server Address</th>
+							<th>Location</th>
+						</tr>
+
+						{% for i in devices %}
+							<tr>
+								<td>{{i.phone}}</td>
+								<td>{{i.device_code}}</td>
+								<td>{{i.token_api}}</td>
+								<td>{{i.server_address}}</td>
+								<td>{{i.location}}</td>
+							</tr>
+						{% endfor %}
+						
+					</table>
+				</div>
+			</div>
+
+		</div>
+
+{% endblock content %}

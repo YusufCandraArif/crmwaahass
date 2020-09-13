@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from django.contrib.auth.models import User
 from ahass import settings
+from .apiwa import send_whatsapp
 
 class Token(models.Model):
     SECRET_KEY = settings.SECRET_KEY
@@ -28,10 +29,6 @@ class Customer(models.Model):
     no_motor = models.CharField(max_length=200, null=True, blank=False)
     phone = models.CharField(max_length=200, null=True, blank=False)
     email = models.CharField(max_length=200, null=True)
-    # date_created = models.DateTimeField(null=True)
-    # date_h7 = models.DateTimeField(null=True)
-    # date_h3 = models.DateTimeField(null=True)
-    # date_phone = models.DateTimeField(null=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     date_h7 = models.DateTimeField(auto_now_add=True, null=True)
     date_h3 = models.DateTimeField(auto_now_add=True, null=True)
@@ -45,21 +42,89 @@ class Customer(models.Model):
     tipe_motor = models.CharField(max_length=200, null=True, blank=False)
     km_akhir = models.CharField(max_length=200, null=True, blank=False)
     ket = models.CharField(max_length=200, null=True, blank=False)
-
-    # def save(self, *args, **kwargs):
-    #     date_time = datetime.now()
-    #     self.date_created = date_time.strftime('%Y-%m-%d %H:%M:%S')
-    #     self.date_h7 = date_time + timedelta(days=53)
-    #     self.date_h3 = date_time + timedelta(days=57)
-    #     self.date_phone = date_time + timedelta(days=59)
-    #     super(Customer, self).save(*args, **kwargs)
-
+    message1 = models.TextField(default='', blank=True)
+    message2 = models.TextField(default='', blank=True)
+    message3 = models.TextField(default='', blank=True)
+    message4 = models.TextField(default='', blank=True)
+    status_message1 = models.BooleanField(default=False)
+    status_message2 = models.BooleanField(default=False)
+    status_message3 = models.BooleanField(default=False)
+    status_message4 = models.BooleanField(default=False)
     
     def __str__(self):
-        return self.name
+        return 'Customer: {}'.format(self.name)
 
 
-    #         # cr_date = datetime.strptime(sale.write_date, '%Y-%m-%d %H:%M:%S')
-    #         # tanggal_h7 = cr_date + timedelta(days=53)
-    #         # tanggal_h3 = cr_date + timedelta(days=57)
-    #         # tanggal_telpon = cr_date + timedelta(days=59)
+class Device(models.Model):
+    phone = models.CharField(max_length=200, null=True, blank=False)
+    device_code = models.CharField(max_length=200, null=True, blank=False)
+    token_api = models.CharField(max_length=300, null=True, blank=False)
+    server_address = models.CharField(max_length=200, null=True, blank=False, help_text="Only main name server address. Example: wa.test.com")
+    location = models.CharField(max_length=200, null=True, blank=True)
+    
+    def __str__(self):
+        return 'Device: {}'.format(self.phone)
+
+class SendWA(models.Model):
+    CHOICES = (
+			('Text Only', 'Text Only'),
+			('Image', 'Image'),
+			('Video', 'Video'),
+			('Document','Document'),
+			)
+    
+    LOCATION = (
+			('',''),
+			('Jawa Tengah', 'Jawa Tengah'),
+			('Jawa Timur', 'Jawa Timur'),
+			('Jawa Barat','Jawa Barat'),
+			('Banten','Banten'),
+			('DKI Jakarta','DKI Jakarta'),
+			('Yogyakarta','Yogyakarta')
+			)
+        
+    MESSAGES = (
+			('Message 1', 'Message 1'),
+			('Message 2', 'Message 2'),
+			('Message 3', 'Message 3'),
+			('Message 4','Message 4'),
+			)
+    
+    messages = models.CharField(max_length=200, default='', null=False, choices=MESSAGES)
+    message = models.TextField(null=False, blank=True)
+    media_url = models.URLField(max_length=450, default='', null=True, blank=True)
+    type_media_url = models.CharField(max_length=200, default='', null=False, choices=CHOICES)
+    location = models.CharField(max_length=200, default='',blank=True, null=True, choices=LOCATION)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, default='', related_name="device", null=True, blank=True)
+    
+    def __str__(self):
+        return "Sendwa: {}".format(self.created_at)
+
+    def save(self, *args, **kwargs):
+        custmers = Customer.objects.all()
+        for customer in custmers:
+            phone = customer.phone
+            if phone:
+                status = send_whatsapp(self.message, self.media_url,
+                                        self.type_media_url, phone,
+                                        self.device.token_api,
+                                        self.device.server_address)
+                if self.messages == 'Message 1':
+                    customer.message1 = self.message
+                    customer.status_message1 = status
+                    customer.save()
+                elif self.messages == 'Message 2':
+                    customer.message2 = self.message
+                    customer.status_message2 = status
+                    customer.save()
+                elif self.messages == 'Message 3':
+                    customer.message3 = self.message
+                    customer.status_message3 = status
+                    customer.save()
+                elif self.messages == 'Message 4':
+                    customer.message4 = self.message
+                    customer.status_message4 = status
+                    customer.save()
+
+        super(SendWA, self).save(*args, **kwargs) 

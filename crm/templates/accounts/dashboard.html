@@ -48,7 +48,28 @@
 			</table>
 		</div>
 	</div>
+	<div class="col-md-7">
+		<h5>DEVICES</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_device' %}">Create New Device</a>
+			<table class="table table-sm">
+				<tr>
+					<th>Phone</th>
+					<th>Device Code</th>
+				</tr>
 
+				{% for device in devices %}
+					<tr>
+						<td>{{device.phone}}</td>
+						<td>{{device.device_code}}</td>
+					</tr>
+				{% endfor %}
+
+		
+			</table>
+		</div>
+	</div>
 
 </div>
 
